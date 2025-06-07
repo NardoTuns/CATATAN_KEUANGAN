@@ -1,373 +1,376 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabel Keuangan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 5px;
-        }
-        button {
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .edit-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-        }
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-        }
-        .save-btn {
-            background-color: #2196F3;
-            color: white;
-            border: none;
-        }
-        .cancel-btn {
-            background-color: #ff9800;
-            color: white;
-            border: none;
-        }
-        .add-form {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-        }
-        .add-form input, .add-form select {
-            margin-right: 10px;
-            padding: 5px;
-        }
-        .add-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabel Keuangan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
 
-        /* Responsif untuk layar HP */
-        @media (max-width: 768px) {
-            body {
-                margin: 10px;
-                font-size: 14px;
-            }
+    h1 {
+      color: #333;
+    }
 
-            .add-form {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                padding: 10px;
-            }
+    .add-form {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+    }
 
-            .add-form input,
-            .add-form select,
-            .add-btn {
-                width: 100%;
-                box-sizing: border-box;
-            }
+    .add-form input,
+    .add-form select {
+      margin-right: 10px;
+      padding: 5px;
+    }
 
-            table {
-                display: block;
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                border: 1px solid #ccc;
-            }
+    .add-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+    }
 
-            .action-buttons {
-                flex-direction: column;
-                gap: 5px;
-            }
+    .table-container {
+      max-height: 60vh;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
 
-            button {
-                font-size: 13px;
-            }
-        }
-    </style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .edit-btn {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+
+    .delete-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+    }
+
+    .save-btn {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+    }
+
+    .cancel-btn {
+      background-color: #ff9800;
+      color: white;
+      border: none;
+    }
+
+    /* Responsif untuk layar HP */
+    @media (max-width: 768px) {
+      body {
+        margin: 10px;
+        font-size: 14px;
+      }
+
+      .add-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .add-form input,
+      .add-form select,
+      .add-btn {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      button {
+        font-size: 13px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .add-form {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #f5f5f5;
+        border-bottom: 2px solid #ddd;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Data Transaksi Keuangan</h1>
-    
-    <div class="add-form">
-        <h3>Tambah Data Baru</h3>
-        <input type="date" id="newTanggal" placeholder="Tanggal" required>
-        <select id="newNama" required>
-            <option value="">Pilih Nama</option>
-            <option value="Dodo">Dodo</option>
-            <option value="Geby">Geby</option>
-            <option value="Lainnya">Lainnya</option>
-        </select>
-        <input type="text" id="newUraian" placeholder="Uraian" required>
-        <input type="number" id="newMasuk" placeholder="Masuk" min="0" value="0">
-        <input type="number" id="newKeluar" placeholder="Keluar" min="0" value="0">
-        <button class="add-btn" onclick="addNewRow()">Tambah</button>
-    </div>
-    
+  <h1>Data Transaksi Keuangan</h1>
+
+  <div class="add-form">
+    <h3>Tambah Data Baru</h3>
+    <input type="date" id="newTanggal" required />
+    <select id="newNama" required>
+      <option value="">Pilih Nama</option>
+      <option value="Dodo">Dodo</option>
+      <option value="Geby">Geby</option>
+      <option value="Lainnya">Lainnya</option>
+    </select>
+    <input type="text" id="newUraian" placeholder="Uraian" required />
+    <input type="number" id="newMasuk" placeholder="Masuk" min="0" value="0" />
+    <input type="number" id="newKeluar" placeholder="Keluar" min="0" value="0" />
+    <button class="add-btn" onclick="addNewRow()">Tambah</button>
+  </div>
+
+  <div class="table-container">
     <table id="dataTable">
-        <thead>
-            <tr>
-                <th>TANGGAL</th>
-                <th>NAMA</th>
-                <th>URAIAN</th>
-                <th>MASUK</th>
-                <th>KELUAR</th>
-                <th>TIME STAMP</th>
-                <th>SALDO</th>
-                <th>AKSI</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-            <!-- Data akan dimuat di sini -->
-        </tbody>
+      <thead>
+        <tr>
+          <th>TANGGAL</th>
+          <th>NAMA</th>
+          <th>URAIAN</th>
+          <th>MASUK</th>
+          <th>KELUAR</th>
+          <th>TIME STAMP</th>
+          <th>SALDO</th>
+          <th>AKSI</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <!-- Data akan dimuat di sini -->
+      </tbody>
     </table>
+  </div>
 
-    <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxwFo4f_kEs0H6fUaYq_JDuoHjzmt8OT8EA6qY_DSG-_hSGGgsxryHF6egDBuG0T5zedg/exec';
-        let tableData = [];
-        let editRowId = null;
+  <script>
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxwFo4f_kEs0H6fUaYq_JDuoHjzmt8OT8EA6qY_DSG-_hSGGgsxryHF6egDBuG0T5zedg/exec';
+    let tableData = [];
+    let editRowId = null;
 
-        async function loadData() {
-            try {
-                const response = await fetch(WEB_APP_URL);
-                const result = await response.json();
-                tableData = [];
-                const rows = result.data || [];
-                for (let i = 0; i < rows.length; i++) {
-                    const row = rows[i];
-                    tableData.push({
-                        id: i + 1,
-                        tanggal: formatDate(row[0]),
-                        nama: row[1] || '',
-                        uraian: row[2] || '',
-                        masuk: row[3] || 0,
-                        keluar: row[4] || 0,
-                        timestamp: row[5] || '',
-                        saldo: row[6] || 0
-                    });
-                }
-                renderTable();
-            } catch (error) {
-                console.error('Error loading data:', error);
-                alert('Gagal memuat data. Silakan coba lagi.');
-            }
+    async function loadData() {
+      try {
+        const response = await fetch(WEB_APP_URL);
+        const result = await response.json();
+        tableData = (result.data || []).map((row, i) => ({
+          id: i + 1,
+          tanggal: formatDate(row[0]),
+          nama: row[1] || '',
+          uraian: row[2] || '',
+          masuk: row[3] || 0,
+          keluar: row[4] || 0,
+          timestamp: row[5] || '',
+          saldo: row[6] || 0
+        }));
+        renderTable();
+      } catch (error) {
+        console.error('Error loading data:', error);
+        alert('Gagal memuat data. Silakan coba lagi.');
+      }
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
+    }
+
+    function renderTable() {
+      const tableBody = document.getElementById('tableBody');
+      tableBody.innerHTML = '';
+      tableData.forEach(row => {
+        const tr = document.createElement('tr');
+        if (editRowId === row.id) {
+          tr.innerHTML = `
+            <td><input type="date" value="${row.tanggal}" id="editTanggal"></td>
+            <td><select id="editNama">
+              <option value="Dodo" ${row.nama === 'Dodo' ? 'selected' : ''}>Dodo</option>
+              <option value="Geby" ${row.nama === 'Geby' ? 'selected' : ''}>Geby</option>
+              <option value="Lainnya" ${row.nama === 'Lainnya' ? 'selected' : ''}>Lainnya</option>
+            </select></td>
+            <td><input type="text" value="${row.uraian}" id="editUraian"></td>
+            <td><input type="number" value="${row.masuk}" id="editMasuk" min="0"></td>
+            <td><input type="number" value="${row.keluar}" id="editKeluar" min="0"></td>
+            <td>${row.timestamp}</td>
+            <td>${formatCurrency(row.saldo)}</td>
+            <td class="action-buttons">
+              <button class="save-btn" onclick="saveRow(${row.id})">Simpan</button>
+              <button class="cancel-btn" onclick="cancelEdit()">Batal</button>
+            </td>
+          `;
+        } else {
+          tr.innerHTML = `
+            <td>${row.tanggal}</td>
+            <td>${row.nama}</td>
+            <td>${row.uraian}</td>
+            <td>${formatCurrency(row.masuk)}</td>
+            <td>${formatCurrency(row.keluar)}</td>
+            <td>${row.timestamp}</td>
+            <td>${formatCurrency(row.saldo)}</td>
+            <td class="action-buttons">
+              <button class="edit-btn" onclick="editRow(${row.id})">Edit</button>
+              <button class="delete-btn" onclick="deleteRow(${row.id})">Hapus</button>
+            </td>
+          `;
         }
+        tableBody.appendChild(tr);
+      });
+    }
 
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            return date.toISOString().split('T')[0];
-        }
+    function formatCurrency(amount) {
+      return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
 
-        function renderTable() {
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
-            tableData.forEach(row => {
-                const tr = document.createElement('tr');
-                if (editRowId === row.id) {
-                    tr.innerHTML = `
-                        <td><input type="date" value="${row.tanggal}" id="editTanggal"></td>
-                        <td>
-                            <select id="editNama">
-                                <option value="Dodo" ${row.nama === 'Dodo' ? 'selected' : ''}>Dodo</option>
-                                <option value="Geby" ${row.nama === 'Geby' ? 'selected' : ''}>Geby</option>
-                                <option value="Lainnya" ${row.nama === 'Lainnya' ? 'selected' : ''}>Lainnya</option>
-                            </select>
-                        </td>
-                        <td><input type="text" value="${row.uraian}" id="editUraian"></td>
-                        <td><input type="number" value="${row.masuk}" id="editMasuk" min="0"></td>
-                        <td><input type="number" value="${row.keluar}" id="editKeluar" min="0"></td>
-                        <td>${row.timestamp}</td>
-                        <td>${formatCurrency(row.saldo)}</td>
-                        <td class="action-buttons">
-                            <button class="save-btn" onclick="saveRow(${row.id})">Simpan</button>
-                            <button class="cancel-btn" onclick="cancelEdit()">Batal</button>
-                        </td>
-                    `;
-                } else {
-                    tr.innerHTML = `
-                        <td>${row.tanggal}</td>
-                        <td>${row.nama}</td>
-                        <td>${row.uraian}</td>
-                        <td>${formatCurrency(row.masuk)}</td>
-                        <td>${formatCurrency(row.keluar)}</td>
-                        <td>${row.timestamp}</td>
-                        <td>${formatCurrency(row.saldo)}</td>
-                        <td class="action-buttons">
-                            <button class="edit-btn" onclick="editRow(${row.id})">Edit</button>
-                            <button class="delete-btn" onclick="deleteRow(${row.id})">Hapus</button>
-                        </td>
-                    `;
-                }
-                tableBody.appendChild(tr);
-            });
-        }
+    function editRow(id) {
+      editRowId = id;
+      renderTable();
+    }
 
-        function formatCurrency(amount) {
-            return 'Rp ' + amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
+    function cancelEdit() {
+      editRowId = null;
+      renderTable();
+    }
 
-        function editRow(id) {
-            editRowId = id;
-            renderTable();
-        }
-
-        function cancelEdit() {
+    async function saveRow(id) {
+      const rowIndex = tableData.findIndex(row => row.id === id);
+      if (rowIndex !== -1) {
+        const updatedRow = {
+          ...tableData[rowIndex],
+          tanggal: document.getElementById('editTanggal').value,
+          nama: document.getElementById('editNama').value,
+          uraian: document.getElementById('editUraian').value,
+          masuk: parseFloat(document.getElementById('editMasuk').value) || 0,
+          keluar: parseFloat(document.getElementById('editKeluar').value) || 0,
+          timestamp: new Date().toISOString()
+        };
+        try {
+          const response = await fetch(WEB_APP_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'update', rowId: id, data: updatedRow })
+          });
+          const result = await response.json();
+          if (result.success) {
+            tableData[rowIndex] = updatedRow;
+            recalculateSaldo();
             editRowId = null;
             renderTable();
+            alert('Data berhasil diperbarui!');
+          } else throw new Error('Gagal memperbarui data');
+        } catch (error) {
+          console.error('Error updating data:', error);
+          alert('Gagal memperbarui data. Silakan coba lagi.');
         }
+      }
+    }
 
-        async function saveRow(id) {
-            const rowIndex = tableData.findIndex(row => row.id === id);
-            if (rowIndex !== -1) {
-                const updatedRow = {
-                    ...tableData[rowIndex],
-                    tanggal: document.getElementById('editTanggal').value,
-                    nama: document.getElementById('editNama').value,
-                    uraian: document.getElementById('editUraian').value,
-                    masuk: parseFloat(document.getElementById('editMasuk').value) || 0,
-                    keluar: parseFloat(document.getElementById('editKeluar').value) || 0,
-                    timestamp: new Date().toISOString()
-                };
-                try {
-                    const response = await fetch(WEB_APP_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            action: 'update',
-                            rowId: id,
-                            data: updatedRow
-                        })
-                    });
-                    const result = await response.json();
-                    if (result.success) {
-                        tableData[rowIndex] = updatedRow;
-                        recalculateSaldo();
-                        editRowId = null;
-                        renderTable();
-                        alert('Data berhasil diperbarui!');
-                    } else {
-                        throw new Error('Gagal memperbarui data');
-                    }
-                } catch (error) {
-                    console.error('Error updating data:', error);
-                    alert('Gagal memperbarui data. Silakan coba lagi.');
-                }
-            }
-        }
-
-        async function deleteRow(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                const rowIndex = tableData.findIndex(row => row.id === id);
-                if (rowIndex !== -1) {
-                    try {
-                        const response = await fetch(WEB_APP_URL, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                action: 'delete',
-                                rowId: id
-                            })
-                        });
-                        const result = await response.json();
-                        if (result.success) {
-                            tableData.splice(rowIndex, 1);
-                            recalculateSaldo();
-                            renderTable();
-                            alert('Data berhasil dihapus!');
-                        } else {
-                            throw new Error('Gagal menghapus data');
-                        }
-                    } catch (error) {
-                        console.error('Error deleting data:', error);
-                        alert('Gagal menghapus data. Silakan coba lagi.');
-                    }
-                }
-            }
-        }
-
-        async function addNewRow() {
-            const newRow = {
-                id: tableData.length > 0 ? Math.max(...tableData.map(row => row.id)) + 1 : 1,
-                tanggal: document.getElementById('newTanggal').value,
-                nama: document.getElementById('newNama').value,
-                uraian: document.getElementById('newUraian').value,
-                masuk: parseFloat(document.getElementById('newMasuk').value) || 0,
-                keluar: parseFloat(document.getElementById('newKeluar').value) || 0,
-                timestamp: new Date().toISOString(),
-                saldo: 0
-            };
-
-            if (!newRow.tanggal || !newRow.nama || !newRow.uraian) {
-                alert('Tanggal, Nama, dan Uraian harus diisi!');
-                return;
-            }
-
-            try {
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'add',
-                        data: newRow
-                    })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    tableData.push(newRow);
-                    recalculateSaldo();
-                    document.getElementById('newTanggal').value = '';
-                    document.getElementById('newNama').value = '';
-                    document.getElementById('newUraian').value = '';
-                    document.getElementById('newMasuk').value = '0';
-                    document.getElementById('newKeluar').value = '0';
-                    renderTable();
-                    alert('Data berhasil ditambahkan!');
-                } else {
-                    throw new Error('Gagal menambahkan data');
-                }
-            } catch (error) {
-                console.error('Error adding data:', error);
-                alert('Gagal menambahkan data. Silakan coba lagi.');
-            }
-        }
-
-        function recalculateSaldo() {
-            let saldo = 0;
-            tableData.forEach(row => {
-                saldo += row.masuk - row.keluar;
-                row.saldo = saldo;
+    async function deleteRow(id) {
+      if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+        const rowIndex = tableData.findIndex(row => row.id === id);
+        if (rowIndex !== -1) {
+          try {
+            const response = await fetch(WEB_APP_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'delete', rowId: id })
             });
+            const result = await response.json();
+            if (result.success) {
+              tableData.splice(rowIndex, 1);
+              recalculateSaldo();
+              renderTable();
+              alert('Data berhasil dihapus!');
+            } else throw new Error('Gagal menghapus data');
+          } catch (error) {
+            console.error('Error deleting data:', error);
+            alert('Gagal menghapus data. Silakan coba lagi.');
+          }
         }
+      }
+    }
 
-        document.addEventListener('DOMContentLoaded', loadData);
-    </script>
+    async function addNewRow() {
+      const newRow = {
+        id: tableData.length > 0 ? Math.max(...tableData.map(row => row.id)) + 1 : 1,
+        tanggal: document.getElementById('newTanggal').value,
+        nama: document.getElementById('newNama').value,
+        uraian: document.getElementById('newUraian').value,
+        masuk: parseFloat(document.getElementById('newMasuk').value) || 0,
+        keluar: parseFloat(document.getElementById('newKeluar').value) || 0,
+        timestamp: new Date().toISOString(),
+        saldo: 0
+      };
+
+      if (!newRow.tanggal || !newRow.nama || !newRow.uraian) {
+        alert('Tanggal, Nama, dan Uraian harus diisi!');
+        return;
+      }
+
+      try {
+        const response = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'add', data: newRow })
+        });
+        const result = await response.json();
+        if (result.success) {
+          tableData.push(newRow);
+          recalculateSaldo();
+          document.getElementById('newTanggal').value = '';
+          document.getElementById('newNama').value = '';
+          document.getElementById('newUraian').value = '';
+          document.getElementById('newMasuk').value = '0';
+          document.getElementById('newKeluar').value = '0';
+          renderTable();
+          alert('Data berhasil ditambahkan!');
+        } else throw new Error('Gagal menambahkan data');
+      } catch (error) {
+        console.error('Error adding data:', error);
+        alert('Gagal menambahkan data. Silakan coba lagi.');
+      }
+    }
+
+    function recalculateSaldo() {
+      let saldo = 0;
+      tableData.forEach(row => {
+        saldo += row.masuk - row.keluar;
+        row.saldo = saldo;
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', loadData);
+  </script>
 </body>
 </html>
